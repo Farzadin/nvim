@@ -24,13 +24,13 @@ return {
         documentation = cmp.config.window.bordered(),
       },
       formatting = {
-        fields = {'menu', 'abbr', 'kind'},
+        fields = { "menu", "abbr", "kind" },
         format = function(entry, item)
           local menu_icon = {
-            nvim_lsp = 'lsp',
-            luasnip = 'lua',
-            buffer = 'buf',
-            path = 'path',
+            nvim_lsp = "lsp",
+            luasnip = "lua",
+            buffer = "buf",
+            path = "path",
           }
 
           item.menu = menu_icon[entry.source.name]
@@ -45,9 +45,9 @@ return {
         ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
       }),
       sources = cmp.config.sources({
-        { name = "nvim_lsp", keyword_length = 1 },
-        { name = "luasnip",  keyword_length = 2 }, -- For luasnip users.
-        { name = "buffer",   keyword_length = 3 },
+        { name = "nvim_lsp" },
+        { name = "luasnip" }, -- For luasnip users.
+        { name = "buffer" },
       }),
     })
 
@@ -85,6 +85,7 @@ return {
     -- Set up lspconfig.
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
     local lspconfig = require("lspconfig")
+    capabilities.textDocument.completion.completionItem.snippetSupport = true
 
     lspconfig.tsserver.setup({
       capabilities = capabilities,
@@ -92,6 +93,28 @@ return {
 
     lspconfig.lua_ls.setup({
       capabilities = capabilities,
+    })
+
+    lspconfig.html.setup({
+      capabilities = capabilities,
+    })
+
+    lspconfig.cssls.setup({
+      capabilities = capabilities,
+    })
+
+    lspconfig.emmet_ls.setup({
+      -- on_attach = on_attach,
+      capabilities = capabilities,
+      filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue" },
+      init_options = {
+        html = {
+          options = {
+            -- For possible options, see: https://github.com/emmetio/emmet/blob/master/src/config.ts#L79-L267
+            ["bem.enabled"] = true,
+          },
+        },
+      }
     })
   end,
 }
